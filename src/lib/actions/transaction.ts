@@ -6,7 +6,7 @@ import { expenseSchema, incomeSchema } from '../validations/transaction'
 
 const HARDCODED_USER_ID = '00000000-0000-0000-0000-000000000000'
 
-export async function createExpense(prevState: any, formData: FormData) {
+export async function createExpense(_prevState: unknown, formData: FormData) {
   try {
     const rawData = {
       wallet_id: formData.get('wallet_id'),
@@ -28,7 +28,7 @@ export async function createExpense(prevState: any, formData: FormData) {
 
     const { wallet_id, amount, category, description, date } = validatedData.data
 
-    const result = await db.$transaction(async (tx) => {
+    await db.$transaction(async (tx) => {
       const wallet = await tx.wallet.findUnique({
         where: { id: wallet_id, user_id: HARDCODED_USER_ID }
       })
@@ -65,20 +65,21 @@ export async function createExpense(prevState: any, formData: FormData) {
     revalidatePath('/')
     
     return { success: true, message: 'Pengeluaran berhasil dicatat!' }
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Terjadi kesalahan sistem.'
     console.error('Failed to create expense:', error)
-    return { success: false, message: error.message || 'Terjadi kesalahan sistem.' }
+    return { success: false, message }
   }
 }
 
-export async function createIncome(prevState: any, formData: FormData) {
+export async function createIncome(_prevState: unknown, formData: FormData) {
   try {
     const distributionsRaw = formData.get('distributions') as string
     let parsedDistributions = []
     
     try {
       parsedDistributions = JSON.parse(distributionsRaw || '[]')
-    } catch (e) {
+    } catch {
       return { success: false, message: 'Data distribusi tidak valid.' }
     }
 
@@ -154,8 +155,9 @@ export async function createIncome(prevState: any, formData: FormData) {
     revalidatePath('/')
     
     return { success: true, message: 'Pemasukan berhasil didistribusikan!' }
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Terjadi kesalahan sistem.'
     console.error('Failed to record income:', error)
-    return { success: false, message: error.message || 'Terjadi kesalahan sistem.' }
+    return { success: false, message }
   }
 }

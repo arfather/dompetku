@@ -7,7 +7,7 @@ import { db } from '../db'
 // In production, this should come from Supabase server session
 const HARDCODED_USER_ID = '00000000-0000-0000-0000-000000000000'
 
-export async function createWallet(prevState: any, formData: FormData) {
+export async function createWallet(_prevState: unknown, formData: FormData) {
   const name = formData.get('name') as string
   const balance = formData.get('balance')
   

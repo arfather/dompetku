@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { WalletIcon, Receipt, PlusCircle, TrendingUp, TrendingDown, DollarSign, PieChart } from 'lucide-react'
+import { WalletIcon, Receipt, PlusCircle, TrendingUp, TrendingDown, PieChart } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { getDashboardStats } from '@/lib/actions/dashboard'
 import { WalletPieChart } from './_components/WalletPieChart'
 import { RecentTransactionsTable } from './_components/RecentTransactionsTable'

@@ -19,7 +19,7 @@ export default async function ReportsPage({
     startDate: params.start,
     endDate: params.end,
     walletId: params.wallet,
-    type: params.type as any,
+    type: params.type as 'INCOME' | 'EXPENSE' | undefined,
     category: params.category,
   }
 

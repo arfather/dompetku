@@ -85,7 +85,7 @@ export async function getUniqueCategories() {
       distinct: ['category']
     })
     return categories.map(c => c.category).filter(Boolean)
-  } catch (e) {
+  } catch {
     return []
   }
 }
