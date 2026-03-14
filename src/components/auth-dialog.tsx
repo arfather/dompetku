@@ -25,12 +25,10 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const checkAuth = () => {
-      const cookies = document.cookie.split('; ')
-      const authCookie = cookies.find(row => row.startsWith(`${AUTH_COOKIE_NAME}=`))
-      setIsAuthenticated(!!authCookie)
-    }
-    checkAuth()
+    // Check for cookie on the client side
+    const cookies = document.cookie.split('; ')
+    const authCookie = cookies.find(row => row.startsWith(`${AUTH_COOKIE_NAME}=`))
+    setIsAuthenticated(!!authCookie)
   }, [])
 
   const handleLogin = (e: React.FormEvent) => {
@@ -47,23 +45,29 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Prevent flash by returning null while checking
-  if (isAuthenticated === null) return null
+  // Prevent hydration mismatch by rendering nothing while checking
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        {/* Simple loader or just blank dark screen while checking */}
+      </div>
+    )
+  }
 
   if (isAuthenticated) {
     return <>{children}</>
   }
 
   return (
-    <div className="fixed inset-0 z-100 bg-zinc-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
       <Dialog open={true}>
-        <DialogContent className="sm:max-w-md [&>button]:hidden">
+        <DialogContent className="sm:max-w-md [&>button]:hidden shadow-2xl border-zinc-800">
           <DialogHeader>
             <div className="mx-auto bg-primary/10 p-3 rounded-full mb-2 w-fit">
               <Lock className="w-6 h-6 text-primary" />
             </div>
             <DialogTitle className="text-center text-xl font-bold">Akses Terbatas</DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-zinc-400">
               Silakan masukkan kredensial Anda untuk mengakses Dashboard DompetKu.
             </DialogDescription>
           </DialogHeader>
@@ -91,8 +95,8 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
               />
             </div>
             {error && <p className="text-sm text-red-500 font-medium text-center">{error}</p>}
-            <DialogFooter className="sm:justify-center">
-              <Button type="submit" className="w-full">
+            <DialogFooter className="sm:justify-center pt-2">
+              <Button type="submit" className="w-full h-11 text-base">
                 Masuk ke Aplikasi
               </Button>
             </DialogFooter>
