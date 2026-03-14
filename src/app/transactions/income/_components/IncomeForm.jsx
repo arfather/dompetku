@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { HandCoins, AlertCircle } from 'lucide-react'
-import type { Wallet } from '@prisma/client'
 import Link from 'next/link'
+import { NumericInput } from '@/components/ui/numeric-input'
 
 const initialState = {
   success: false,
@@ -25,17 +25,17 @@ const CATEGORIES = [
   'Lainnya'
 ]
 
-export function IncomeForm({ wallets }: { wallets: Wallet[] }) {
+export function IncomeForm({ wallets }) {
   const [state, formAction, isPending] = useActionState(createIncome, initialState)
-  const [totalAmount, setTotalAmount] = useState<number>(0)
-  const [distributions, setDistributions] = useState<Record<string, number>>(() => {
-    const initialDists: Record<string, number> = {}
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [distributions, setDistributions] = useState(() => {
+    const initialDists = {}
     wallets.forEach(w => initialDists[w.id] = 0)
     return initialDists
   })
 
-  const handleDistributionChange = (walletId: string, value: string) => {
-    const amount = value ? parseInt(value) : 0
+  const handleDistributionChange = (walletId, rawValue) => {
+    const amount = rawValue ? parseInt(rawValue) : 0
     setDistributions(prev => ({ ...prev, [walletId]: amount }))
   }
 
@@ -70,15 +70,13 @@ export function IncomeForm({ wallets }: { wallets: Wallet[] }) {
           <div className="space-y-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg border">
             <div className="space-y-2">
               <Label htmlFor="total_amount" className="text-base font-semibold">Total Pemasukan (Rp) *</Label>
-              <Input 
+              <NumericInput 
                 id="total_amount" 
                 name="total_amount" 
-                type="number"
-                min="1"
                 required
-                placeholder="Contoh: 10000000"
+                placeholder="Contoh: 10.000.000"
                 value={totalAmount || ''}
-                onChange={(e) => setTotalAmount(e.target.value ? parseInt(e.target.value) : 0)}
+                onChange={(raw) => setTotalAmount(raw ? parseInt(raw) : 0)}
                 disabled={isPending}
               />
               {state?.errors?.total_amount && <p className="text-xs text-red-500">{state.errors.total_amount}</p>}
@@ -141,12 +139,10 @@ export function IncomeForm({ wallets }: { wallets: Wallet[] }) {
               {wallets.map((wallet) => (
                 <div key={wallet.id} className="flex items-center gap-4">
                   <Label className="w-1/3 truncate" title={wallet.name}>{wallet.name}</Label>
-                  <Input 
-                    type="number"
-                    min="0"
+                  <NumericInput 
                     placeholder="0"
                     value={distributions[wallet.id] || ''}
-                    onChange={(e) => handleDistributionChange(wallet.id, e.target.value)}
+                    onChange={(raw) => handleDistributionChange(wallet.id, raw)}
                     disabled={isPending}
                     className="w-2/3"
                   />

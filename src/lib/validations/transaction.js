@@ -8,11 +8,9 @@ export const expenseSchema = z.object({
   date: z.any()
     .refine((val) => val !== undefined && val !== "", "Tanggal transaksi harus diisi")
     .pipe(z.coerce.date({
-      error: () => "Format tanggal tidak valid",
+      invalid_type_error: "Format tanggal tidak valid",
     })),
 })
-
-export type ExpenseInput = z.infer<typeof expenseSchema>
 
 export const incomeDistributionSchema = z.object({
   wallet_id: z.string().uuid("Dompet distribusi tidak valid"),
@@ -26,9 +24,7 @@ export const incomeSchema = z.object({
   date: z.any()
     .refine((val) => val !== undefined && val !== "", "Tanggal transaksi harus diisi")
     .pipe(z.coerce.date({
-      error: () => "Format tanggal tidak valid",
+      invalid_type_error: "Format tanggal tidak valid",
     })),
   distributions: z.array(incomeDistributionSchema).min(1, "Harus mengalokasikan ke minimal 1 dompet")
 })
-
-export type IncomeInput = z.infer<typeof incomeSchema>

@@ -9,13 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { Transaction } from '@prisma/client'
 
-interface RecentTransactionsTableProps {
-  transactions: (Omit<Transaction, 'amount'> & { amount: number, wallet: { name: string } })[]
-}
-
-export function RecentTransactionsTable({ transactions }: RecentTransactionsTableProps) {
+export function RecentTransactionsTable({ transactions }) {
   return (
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader>

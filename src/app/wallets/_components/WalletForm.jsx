@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import { createWallet } from '@/lib/actions/wallet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { NumericInput } from '@/components/ui/numeric-input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Wallet as WalletIcon, PlusCircle } from 'lucide-react'
@@ -39,13 +40,10 @@ export function WalletForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="balance">Saldo Awal (Opsional)</Label>
-            <Input 
+            <NumericInput 
               id="balance" 
               name="balance" 
-              type="number" 
               placeholder="0" 
-              min="0"
-              step="any"
               disabled={isPending}
             />
           </div>

@@ -8,18 +8,14 @@ import { TrendingUp, TrendingDown, Scale } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
-export default async function ReportsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | undefined }>
-}) {
+export default async function ReportsPage({ searchParams }) {
   const params = await searchParams
   
   const filters = {
     startDate: params.start,
     endDate: params.end,
     walletId: params.wallet,
-    type: params.type as 'INCOME' | 'EXPENSE' | undefined,
+    type: params.type,
     category: params.category,
   }
 

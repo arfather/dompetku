@@ -5,11 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6']
 
-interface WalletPieChartProps {
-  data: { name: string; value: number }[]
-}
-
-export function WalletPieChart({ data }: WalletPieChartProps) {
+export function WalletPieChart({ data }) {
   if (!data || data.length === 0) {
     return (
       <Card className="col-span-1 h-full">

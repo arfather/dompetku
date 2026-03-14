@@ -18,8 +18,8 @@ const AUTH_COOKIE_NAME = 'dompetku_auth'
 const VALID_USERNAME = 'arfin'
 const VALID_PASSWORD = 'arfin'
 
-export function AuthDialog({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+export function AuthDialog({ children }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -31,7 +31,7 @@ export function AuthDialog({ children }: { children: React.ReactNode }) {
     setIsAuthenticated(!!authCookie)
   }, [])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e) => {
     e.preventDefault()
     if (username === VALID_USERNAME && password === VALID_PASSWORD) {
       // Set cookie for 1 day

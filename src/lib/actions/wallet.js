@@ -7,15 +7,15 @@ import { db } from '../db'
 // In production, this should come from Supabase server session
 const HARDCODED_USER_ID = '00000000-0000-0000-0000-000000000000'
 
-export async function createWallet(_prevState: unknown, formData: FormData) {
-  const name = formData.get('name') as string
+export async function createWallet(_prevState, formData) {
+  const name = formData.get('name')
   const balance = formData.get('balance')
   
   if (!name || name.trim() === '') {
     return { error: 'Wallet name is required', success: false }
   }
 
-  const initialBalance = balance ? parseFloat(balance as string) : 0
+  const initialBalance = balance ? parseFloat(balance) : 0
 
   try {
     // Note: We need to ensure a user exists first for our Foreign Key constraint.
@@ -51,7 +51,7 @@ export async function createWallet(_prevState: unknown, formData: FormData) {
 
 export async function getWallets() {
   try {
-    return await db.wallet.findMany({
+    const wallets = await db.wallet.findMany({
       where: {
         user_id: HARDCODED_USER_ID
       },
@@ -59,6 +59,11 @@ export async function getWallets() {
         created_at: 'desc'
       }
     })
+
+    return wallets.map(w => ({
+      ...w,
+      balance: Number(w.balance)
+    }))
   } catch (error) {
     console.error('Failed to fetch wallets:', error)
     return []

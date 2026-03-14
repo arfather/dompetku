@@ -6,7 +6,7 @@ import { expenseSchema, incomeSchema } from '../validations/transaction'
 
 const HARDCODED_USER_ID = '00000000-0000-0000-0000-000000000000'
 
-export async function createExpense(_prevState: unknown, formData: FormData) {
+export async function createExpense(_prevState, formData) {
   try {
     const rawData = {
       wallet_id: formData.get('wallet_id'),
@@ -72,9 +72,9 @@ export async function createExpense(_prevState: unknown, formData: FormData) {
   }
 }
 
-export async function createIncome(_prevState: unknown, formData: FormData) {
+export async function createIncome(_prevState, formData) {
   try {
-    const distributionsRaw = formData.get('distributions') as string
+    const distributionsRaw = formData.get('distributions')
     let parsedDistributions = []
     
     try {

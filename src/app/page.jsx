@@ -7,6 +7,8 @@ import { RecentTransactionsTable } from './_components/RecentTransactionsTable'
 
 import { AuthDialog } from '@/components/auth-dialog'
 
+import { CloseBooksButton } from './_components/CloseBooksButton'
+
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
@@ -25,7 +27,10 @@ export default async function Home() {
                 Ringkasan aktivitas keuangan dan alokasi dana Anda.
               </p>
             </div>
-            <div className="hidden md:flex gap-3">
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 font-sans">
+              <div className="hidden md:block">
+                <CloseBooksButton />
+              </div>
               <Link href="/wallets" className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md hover:-translate-y-0.5 h-11 px-6">
                 <WalletIcon className="w-4 h-4 mr-2 text-primary" />
                 Dompet

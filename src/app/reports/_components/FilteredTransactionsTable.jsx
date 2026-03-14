@@ -9,13 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { Transaction } from '@prisma/client'
 
-interface FilteredTransactionsTableProps {
-  transactions: (Omit<Transaction, 'amount'> & { amount: number, wallet: { name: string } })[]
-}
-
-export function FilteredTransactionsTable({ transactions }: FilteredTransactionsTableProps) {
+export function FilteredTransactionsTable({ transactions }) {
   return (
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader>

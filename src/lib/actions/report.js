@@ -1,29 +1,21 @@
 'use server'
 
 import { db } from '../db'
-import { Prisma } from '@prisma/client'
 
 const HARDCODED_USER_ID = '00000000-0000-0000-0000-000000000000'
 
-export type ReportFilters = {
-  startDate?: string
-  endDate?: string
-  walletId?: string
-  type?: 'INCOME' | 'EXPENSE' | 'ALL'
-  category?: string
-}
-
-export async function getTransactionReport(filters: ReportFilters) {
+export async function getTransactionReport(filters) {
   try {
-    const whereClause: Prisma.TransactionWhereInput = {
+    const whereClause = {
       user_id: HARDCODED_USER_ID,
+      journal_id: null
     }
 
     if (filters.startDate) {
-      whereClause.date = { ...whereClause.date as object, gte: new Date(filters.startDate) }
+      whereClause.date = { ...whereClause.date, gte: new Date(filters.startDate) }
     }
     if (filters.endDate) {
-      whereClause.date = { ...whereClause.date as object, lte: new Date(filters.endDate) }
+      whereClause.date = { ...whereClause.date, lte: new Date(filters.endDate) }
     }
     if (filters.walletId && filters.walletId !== 'ALL') {
       whereClause.wallet_id = filters.walletId

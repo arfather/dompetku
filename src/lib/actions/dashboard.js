@@ -22,7 +22,8 @@ export async function getDashboardStats() {
       by: ['type'],
       where: {
         user_id: HARDCODED_USER_ID,
-        date: { gte: startOfMonth }
+        date: { gte: startOfMonth },
+        journal_id: null
       },
       _sum: {
         amount: true
@@ -34,7 +35,10 @@ export async function getDashboardStats() {
 
     // 3. Transaksi Terbaru (5 data terakhir)
     const recentTransactions = await db.transaction.findMany({
-      where: { user_id: HARDCODED_USER_ID },
+      where: { 
+        user_id: HARDCODED_USER_ID,
+        journal_id: null
+      },
       orderBy: [
         { date: 'desc' },
         { created_at: 'desc' }
@@ -57,7 +61,11 @@ export async function getDashboardStats() {
       totalBalance,
       totalIncome,
       totalExpense,
-      recentTransactions: recentTransactions.map(t => ({ ...t, amount: Number(t.amount) })),
+      recentTransactions: recentTransactions.map(t => ({ 
+        ...t, 
+        amount: Number(t.amount),
+        wallet: t.wallet
+      })),
       chartData
     }
 

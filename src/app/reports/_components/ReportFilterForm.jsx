@@ -1,19 +1,14 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Filter } from 'lucide-react'
 
-interface ReportFilterFormProps {
-  wallets: { id: string; name: string }[]
-  categories: string[]
-}
-
-export function ReportFilterForm({ wallets, categories }: ReportFilterFormProps) {
+export function ReportFilterForm({ wallets, categories }) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -23,7 +18,7 @@ export function ReportFilterForm({ wallets, categories }: ReportFilterFormProps)
   const [type, setType] = useState(searchParams.get('type') || 'ALL')
   const [category, setCategory] = useState(searchParams.get('category') || 'ALL')
 
-  const handleFilter = (e: FormEvent) => {
+  const handleFilter = (e) => {
     e.preventDefault()
     
     const params = new URLSearchParams()
@@ -33,7 +28,6 @@ export function ReportFilterForm({ wallets, categories }: ReportFilterFormProps)
     if (type !== 'ALL') params.set('type', type)
     if (category !== 'ALL') params.set('category', category)
     
-    // reset to page 1 if pagination existed
     router.push(`/reports?${params.toString()}`)
   }
 

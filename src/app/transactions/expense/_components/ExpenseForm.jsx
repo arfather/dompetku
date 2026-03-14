@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Receipt, AlertCircle } from 'lucide-react'
-import type { Wallet } from '@prisma/client'
 import Link from 'next/link'
+import { NumericInput } from '@/components/ui/numeric-input'
 
 const initialState = {
   success: false,
@@ -27,7 +27,7 @@ const CATEGORIES = [
   'Lainnya'
 ]
 
-export function ExpenseForm({ wallets }: { wallets: Wallet[] }) {
+export function ExpenseForm({ wallets }) {
   const [state, formAction, isPending] = useActionState(createExpense, initialState)
 
   if (wallets.length === 0) {
@@ -77,11 +77,11 @@ export function ExpenseForm({ wallets }: { wallets: Wallet[] }) {
 
           <div className="space-y-2">
             <Label htmlFor="amount">Nominal Pengeluaran (Rp) *</Label>
-            <Input 
-              id="amount" 
-              name="amount" 
-              type="number" 
-              placeholder="Contoh: 50000" 
+            <Input
+              id="amount"
+              name="amount"
+              type="number"
+              placeholder="Contoh: 50000"
               min="1"
               required
               disabled={isPending}
@@ -108,10 +108,10 @@ export function ExpenseForm({ wallets }: { wallets: Wallet[] }) {
 
             <div className="space-y-2">
               <Label htmlFor="date">Tanggal *</Label>
-              <Input 
-                id="date" 
-                name="date" 
-                type="date" 
+              <Input
+                id="date"
+                name="date"
+                type="date"
                 required
                 defaultValue={new Date().toISOString().split('T')[0]}
                 disabled={isPending}
@@ -129,7 +129,7 @@ export function ExpenseForm({ wallets }: { wallets: Wallet[] }) {
               disabled={isPending}
             />
           </div>
-          
+
           {state?.success === false && state?.message && (
             <div className="p-3 bg-red-50 text-red-600 rounded-md text-sm">
               {state.message}

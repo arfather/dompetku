@@ -1,13 +1,8 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { Wallet } from '@prisma/client'
 
-interface WalletListProps {
-  initialWallets: Wallet[]
-}
-
-export function WalletList({ initialWallets }: WalletListProps) {
+export function WalletList({ initialWallets }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
       {initialWallets.length === 0 ? (
