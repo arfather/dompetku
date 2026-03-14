@@ -1,65 +1,108 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { WalletIcon, Receipt, PlusCircle, TrendingUp, TrendingDown, DollarSign, PieChart } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { getDashboardStats } from '@/lib/actions/dashboard'
+import { WalletPieChart } from './_components/WalletPieChart'
+import { RecentTransactionsTable } from './_components/RecentTransactionsTable'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const stats = await getDashboardStats()
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex min-h-screen flex-col items-center bg-zinc-50 dark:bg-zinc-950 p-4 pb-24 md:p-12 font-sans">
+      <main className="w-full max-w-6xl flex flex-col gap-6 md:gap-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl premium-heading text-zinc-900 dark:text-zinc-50 text-center md:text-left">
+              Dashboard <span className="text-primary">DompetKu</span>
+            </h1>
+            <p className="text-base md:text-lg text-zinc-500 dark:text-zinc-400 text-center md:text-left max-w-lg">
+              Ringkasan aktivitas keuangan dan alokasi dana Anda dengan tampilan yang lebih modern.
+            </p>
+          </div>
+          <div className="hidden md:flex gap-3">
+            <Link href="/wallets" className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md hover:-translate-y-0.5 h-11 px-6">
+              <WalletIcon className="w-4 h-4 mr-2 text-primary" />
+              Dompet
+            </Link>
+            <Link href="/transactions/income" className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/40 hover:-translate-y-0.5 h-11 px-6">
+              <PlusCircle className="w-4 h-4 mr-2" />
+              Pemasukan
+            </Link>
+            <Link href="/transactions/expense" className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all bg-rose-600 hover:bg-rose-700 text-white shadow-lg shadow-rose-600/20 hover:shadow-rose-600/40 hover:-translate-y-0.5 h-11 px-6">
+              <Receipt className="w-4 h-4 mr-2" />
+              Pengeluaran
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Overview Row */}
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card className="soft-shadow hover:shadow-lg transition-all border-none bg-linear-to-br from-indigo-50 to-white dark:from-indigo-950/20 dark:to-zinc-900">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Laporan Transaksi</CardTitle>
+              <PieChart className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="mb-4 text-zinc-600 dark:text-zinc-400">
+                Lihat filter trend riwayat transaksi Anda.
+              </CardDescription>
+              <Link href="/reports" className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold transition-all bg-indigo-600 hover:bg-indigo-700 text-white h-10 px-4">
+                Lihat Laporan Lengkap
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="soft-shadow hover:shadow-lg transition-all border-none">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-bold uppercase tracking-wider text-zinc-500">Pemasukan Bulan Ini</CardTitle>
+              <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">
+                <TrendingUp className="h-4 w-4 text-emerald-600" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
+                +Rp {stats.totalIncome.toLocaleString('id-ID')}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2 font-medium italic">Sejak awal periode</p>
+            </CardContent>
+          </Card>
+
+          <Card className="soft-shadow hover:shadow-lg transition-all border-none">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-bold uppercase tracking-wider text-zinc-500">Pengeluaran Bulan Ini</CardTitle>
+              <div className="p-2 bg-rose-50 dark:bg-rose-900/30 rounded-lg">
+                <TrendingDown className="h-4 w-4 text-rose-600" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black text-rose-600 dark:text-rose-400 font-mono">
+                -Rp {stats.totalExpense.toLocaleString('id-ID')}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2 font-medium italic">Sejak awal periode</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Graphic & Table Row */}
+        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <RecentTransactionsTable transactions={stats.recentTransactions} />
+          </div>
+          <Card className="soft-shadow border-none">
+            <CardHeader>
+              <CardTitle className="premium-heading text-lg">Alokasi Dompet</CardTitle>
+              <CardDescription>Pembagian saldo Anda saat ini</CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+              <WalletPieChart data={stats.chartData} />
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
-  );
+  )
 }

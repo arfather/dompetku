@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Supabase Auth link (opsional, jika Anda ingin merelasikan dengan auth.users milik Supabase)
+// Karena schema auth diletakkan di schema yang berbeda oleh Supabase,
+// seringkali cukup mereferensikan UUID dari tabel auth.users sebagai UserID di sini.
+
+model User {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String    @unique
+  password_hash String?   // Opsional jika murni OAuth/Supabase Auth
+  created_at    DateTime  @default(now())
+  
+  wallets       Wallet[]
+  transactions  Transaction[]
+  
+  @@map("users")
+}
+
+model Wallet {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  name       String
+  balance    Decimal  @default(0) @db.Decimal(12, 2)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user                  User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  transactions          Transaction[]
+  income_distributions  IncomeDistribution[]
+
+  @@map("wallets")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+model Transaction {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String          @db.Uuid
+  wallet_id   String          @db.Uuid
+  type        TransactionType
+  amount      Decimal         @db.Decimal(12, 2)
+  category    String
+  description String?
+  date        DateTime        @db.Date
+  created_at  DateTime        @default(now())
+
+  user                  User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  wallet                Wallet                @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+  income_distributions  IncomeDistribution[]
+
+  @@map("transactions")
+}
+
+model IncomeDistribution {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transaction_id   String   @db.Uuid
+  wallet_id        String   @db.Uuid
+  allocated_amount Decimal  @db.Decimal(12, 2)
+  percentage       Decimal? @db.Decimal(5, 2)
+
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  wallet      Wallet      @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+
+  @@map("income_distributions")
+}
